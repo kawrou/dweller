@@ -4,8 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+psycopg = "*"
+django = "*"
 
 [dev-packages]
+pytest-django = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.12"
