@@ -6,6 +6,7 @@ from django.utils import timezone
 
 class User(AbstractUser):
     username = None
+    email = models.EmailField(unique=True)
     date_of_birth = models.DateField()
 
     USERNAME_FIELD = "email"
