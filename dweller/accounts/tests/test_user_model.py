@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 import pytest
 from accounts.models import User
+from django.conf import settings
 
 normal_user = {
     'email': "normal@user.com",
@@ -45,7 +46,13 @@ def test_user_str_representation():
 
 @pytest.mark.django_db
 def test_create_superuser():
-    admin_user = User.objects.creat_superuser(email="admin@user.com", password="foo")
+    admin_user = User.objects.create_superuser(
+        email="admin@user.com", 
+        first_name="Super", 
+        last_name="Admin", 
+        password="foo",
+        date_of_birth="1990-01-01"
+    )
 
     assert admin_user.email == "admin@user.com"
     assert admin_user.check_password("foo")
