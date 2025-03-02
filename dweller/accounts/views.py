@@ -9,11 +9,9 @@ def signup_view(request: HttpRequest) -> HttpResponse:
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            #return redirect('login')
-            return HttpResponse("Signup Page")
+            return redirect('index')
 
     else:
         form = CustomUserCreationForm()
 
     return render(request, 'accounts/signup.html', {"form": form})
-    #return HttpResponse("Signup Page")
