@@ -5,6 +5,8 @@ from accounts.models import User as UserModel
 from accounts.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 
+from dweller.accounts.tests.conftest import invalid_missing_first_name_form_data, invalid_missing_last_name_form_data
+
 User: UserModel = get_user_model()
 
 # Create your tests here.
@@ -63,3 +65,17 @@ def test_user_must_be_at_least_18(invalid_user_not_18_form_data) -> None:
 
     assert form.is_valid() == False
     assert form.errors is not None and "date_of_birth" in form.errors
+
+@pytest.mark.django_db
+def test_first_name_field_required(invalid_missing_first_name_form_data) -> None:
+    form = CustomUserCreationForm(data=invalid_missing_first_name_form_data)
+
+    assert not form.is_valid()
+    assert form.errors is not None and "first_name" in form.errors
+
+@pytest.mark.django_db
+def test_last_name_field_required(invalid_missing_last_name_form_data) -> None:
+    form = CustomUserCreationForm(data=invalid_missing_last_name_form_data)
+
+    assert not form.is_valid()
+    assert form.errors is not None and "last_name" in form.errors

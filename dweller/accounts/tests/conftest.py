@@ -44,3 +44,25 @@ def invalid_user_not_18_form_data():
         'password1': "StrongPassword123!",
         'password2': "StrongPassword123!",
     }
+
+@pytest.fixture
+def invalid_missing_first_name_form_data():
+    return {
+        'email': "normal@user.com",
+        'first_name': "",
+        'last_name': "Doe",
+        'date_of_birth': date.today() - timedelta(days=365 * 17), 
+        'password1': "StrongPassword123!",
+        'password2': "StrongPassword123!",
+    }
+
+@pytest.fixture
+def invalid_missing_last_name_form_data():
+    return {
+        'email': "normal@user.com",
+        'first_name': "John",
+        'last_name': "",
+        'date_of_birth': date.today() - timedelta(days=365 * 17), 
+        'password1': "StrongPassword123!",
+        'password2': "StrongPassword123!",
+    }
