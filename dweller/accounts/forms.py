@@ -58,28 +58,3 @@ class CustomAuthenticationForm(AuthenticationForm):
             else:
                 self.confirm_login_allowed(self.user_cache)
         return self.cleaned_data
-
-#class LoginForm(forms.Form):
-#    email = forms.EmailField(
-#        label="Email", 
-#        widget=forms.EmailInput(attrs={"autofocus": True}))
-#
-#    password = forms.CharField(
-#        label="Password", 
-#        strip=False, 
-#        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"})
-#    )
-#
-#    def clean(self):
-#        email = self.cleaned_data.get("email")
-#        password = self.cleaned_data.get("password")
-#
-#        if email and password:
-#            self.user = authenticate(email=email, password=password)
-#            if not self.user:
-#                raise forms.ValidationError("Invalid email or password")
-#
-#        return self.cleaned_data
-#
-#    def get_user(self):
-#        return getattr(self, "user", None)
