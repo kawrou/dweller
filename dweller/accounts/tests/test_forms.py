@@ -5,8 +5,6 @@ from accounts.models import User as UserModel
 from accounts.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 
-from dweller.accounts.tests.conftest import invalid_missing_first_name_form_data, invalid_missing_last_name_form_data
-
 User: UserModel = get_user_model()
 
 # Create your tests here.
