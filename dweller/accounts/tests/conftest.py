@@ -2,6 +2,16 @@ import pytest
 from datetime import date, timedelta
 
 @pytest.fixture
+def normal_user():  
+    return {
+        'email': "normal@user.com",
+        'password': "foo",
+        'first_name': "John",
+        'last_name': "Doe",
+        'dob': "1990-01-01"
+    }
+
+@pytest.fixture
 def valid_form_data():
     return {
         'email': "normal@user.com",

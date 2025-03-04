@@ -1,21 +1,13 @@
 import pytest
 from accounts.models import User as UserModel
 from accounts.forms import CustomAuthenticationForm
-from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import authenticate, get_user_model
 
 User: UserModel = get_user_model()
 
-normal_user = {
-    'email': "normal@user.com",
-    'password': "a;lksjfa!@#!",
-    'first_name': "John",
-    'last_name': "Doe",
-    'dob': "1990-01-01"
-}
 # Create your tests here.
 @pytest.mark.django_db
-def test_valid_form_authenticates_user():
+def test_valid_form_authenticates_user(normal_user):
     User.objects.create_user(
         email=normal_user["email"], 
         password=normal_user["password"], 
@@ -37,7 +29,7 @@ def test_valid_form_authenticates_user():
     assert not form.errors
 
 @pytest.mark.django_db
-def test_invalid_password_fails_authentication():
+def test_invalid_password_fails_authentication(normal_user):
     form = CustomAuthenticationForm(
         data={
             "username": normal_user["email"], 
@@ -61,9 +53,9 @@ def test_non_exisent_user_fails_authentication():
     assert form.errors
 
 @pytest.mark.django_db
-def test_inactive_user_cannot_authenticate():
-    inactive_user = User.objects.create_user(
-        email="inactive@test.com",
+def test_inactive_user_cannot_authenticate(normal_user):
+    User.objects.create_user(
+        email=normal_user["email"],
         password=normal_user["password"], 
         first_name=normal_user["first_name"],
         last_name=normal_user["last_name"],
@@ -73,8 +65,8 @@ def test_inactive_user_cannot_authenticate():
 
     form = CustomAuthenticationForm(
         data={
-            "username": "inactive@test.com", 
-            "password": "strongpassword123"
+            "username": normal_user["email"], 
+            "password": normal_user["password"]
         }
     )
 

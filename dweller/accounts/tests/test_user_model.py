@@ -6,15 +6,7 @@ from django.contrib.auth import get_user_model
 
 User: type[UserModel] = get_user_model()
 
-normal_user = {
-    'email': "normal@user.com",
-    'password': "foo",
-    'first_name': "John",
-    'last_name': "Doe",
-    'dob': "1990-01-01"
-}
-
-def create_user() -> UserModel:
+def create_user(normal_user) -> UserModel:
     return User.objects.create_user(
         email=normal_user["email"], 
         password=normal_user["password"], 
@@ -25,8 +17,8 @@ def create_user() -> UserModel:
 
 # Create your tests here.
 @pytest.mark.django_db
-def test_create_user() -> None:
-    user = create_user()
+def test_create_user(normal_user) -> None:
+    user = create_user(normal_user)
 
     assert user.email == normal_user["email"]
     assert user.first_name == normal_user["first_name"]
@@ -38,21 +30,21 @@ def test_create_user() -> None:
     assert not user.is_superuser 
 
 @pytest.mark.django_db
-def test_unique_email():
-    create_user()
+def test_unique_email(normal_user):
+    create_user(normal_user)
 
     with pytest.raises(IntegrityError):
-        create_user()
+        create_user(normal_user)
 
 @pytest.mark.django_db
-def test_hashed_password():
-    user = create_user()
+def test_hashed_password(normal_user):
+    user = create_user(normal_user)
 
     assert user.password != normal_user["password"]
     assert user.check_password(normal_user["password"]) is True
 
 @pytest.mark.django_db
-def test_user_creation_fails_without_email():
+def test_user_creation_fails_without_email(normal_user):
     with pytest.raises(ValueError):
         User.objects.create_user(
             email="", 
@@ -63,8 +55,8 @@ def test_user_creation_fails_without_email():
         )
 
 @pytest.mark.django_db
-def test_user_str_representation():
-    user = create_user()
+def test_user_str_representation(normal_user):
+    user = create_user(normal_user)
     assert str(user) == "normal@user.com"
 
 @pytest.mark.django_db
