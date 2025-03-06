@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 psycopg = "*"
 django = "*"
+django-tailwind = {extras = ["reload"], version = "*"}
 
 [dev-packages]
 pytest-django = "*"
