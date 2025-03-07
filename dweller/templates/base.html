@@ -10,11 +10,11 @@
 <body class="bg-gray-100 font-serif leading-normal tracking-normal">
 	<!-- Navbar -->
 	<nav class="">
-		<div class="container flex flex-row mx-auto">
+		<div class="container mx-auto max-w-7xl px-2 sm:px-6 lg:px8 flex flex-row justify-between">
 			<a class="" href="{% url 'home'%}">MySite</a>
 			<!-- The search bar? -->
         		<div class="">
-        		        <ul class="">
+        		        <ul class="flex flex-row gap-4">
 		                	{% if user.is_authenticated %}
 					<li class="nav-item">
                         			<a class="nav-link" href="{% url 'logout' %}">Logout</a>
