@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 <h1> Trips </h1>
+{% if bookings %}
+	<ul>
+	{% for booking in bookings %}
+		<li>{{ booking.destination}} </li>
+	{% end for %}
+	</ul>
+{% else %}
+	<p>You currently have no trips booked.</p>
+{% endif %}
+
 <h2> Where you've been </h2>
 {% endblock %}
 
