@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #project apps
     'core',
     'accounts',
+    'bookings',
 
     #external apps
     'tailwind',
