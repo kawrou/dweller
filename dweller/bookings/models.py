@@ -8,5 +8,7 @@ class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     destination = models.CharField(max_length=255)
 
+    objects = models.Manager()
+
     def __str__(self):
         return f"Booking by {self.user.email} to {self.destination}"
