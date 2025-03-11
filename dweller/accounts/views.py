@@ -10,7 +10,7 @@ def signup_view(request: HttpRequest) -> HttpResponse:
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('home')
 
     else:
         form = CustomUserCreationForm()
@@ -22,7 +22,7 @@ def login_view(request: HttpRequest):
         form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect('index')
+            return redirect('trips')
     else:
         form = CustomAuthenticationForm()
     return render(request, 'accounts/login.html', {"form": form})
