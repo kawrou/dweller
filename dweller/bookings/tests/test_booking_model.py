@@ -31,3 +31,36 @@ def test_create_booking(normal_user):
     assert booking.user == user
     assert booking.destination == "Paris"
     assert str(booking) == "Booking by normal@user.com to Paris"
+
+@pytest.mark.django_db
+def test_booking_query(normal_user):
+    user = create_user(normal_user)
+    booking1 = Booking.objects.create(
+        user = user,
+        destination = "Paris"
+    )
+    booking2 = Booking.objects.create(
+        user = user,
+        destination = "Italy"
+    )
+
+    bookings = Booking.objects.filter(user=user)
+
+    assert bookings.count() == 2
+    assert booking1, booking2 in bookings
+
+@pytest.mark.django_db
+def test_user_deletion_cascase(normal_user):
+    user = create_user(normal_user)
+
+    booking = Booking.objects.create(
+        user = user,
+        destination="Paris"
+    )
+
+    assert Booking.objects.count() == 1
+
+    user.delete()
+
+    assert Booking.objects.count() == 0
+
