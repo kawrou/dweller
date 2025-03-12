@@ -1,66 +1,60 @@
 from django.test import TestCase
 import pytest
-from accounts.models import User as UserModel
-from django.contrib.auth import get_user_model
-from tests.conftest_global import normal_user
-
+from tests.conftest_global import test_user1, test_user2 
 from bookings.models import Booking
 
-User: UserModel = get_user_model()
+def create_paris_booking(user):
+    return Booking.objects.create(
+        user = user,
+        destination="Paris"
+    )
 
-def create_user(normal_user) -> UserModel:
-    return User.objects.create_user(
-        email=normal_user["email"], 
-        password=normal_user["password"], 
-        first_name=normal_user["first_name"],
-        last_name=normal_user["last_name"],
-        date_of_birth=normal_user["dob"]
+def create_italy_booking(user):
+    return Booking.objects.create(
+        user = user,
+        destination="Italy"
     )
 
 # Create your tests here.
 @pytest.mark.django_db
-def test_create_booking(normal_user):
-    user = create_user(normal_user)
-
-    booking = Booking.objects.create(
-        user = user,
-        destination="Paris"
-    )
+def test_create_booking(test_user1):
+    booking = create_paris_booking(test_user1)
 
     assert Booking.objects.count() == 1
-    assert booking.user == user
+    assert booking.user == test_user1
     assert booking.destination == "Paris"
-    assert str(booking) == "Booking by normal@user.com to Paris"
+    assert str(booking) == "Booking by user1@user.com to Paris"
 
 @pytest.mark.django_db
-def test_booking_query(normal_user):
-    user = create_user(normal_user)
-    booking1 = Booking.objects.create(
-        user = user,
-        destination = "Paris"
-    )
-    booking2 = Booking.objects.create(
-        user = user,
-        destination = "Italy"
-    )
+def test_booking_query_for_single_user(test_user1):
+    booking1 = create_paris_booking(test_user1)
+    booking2 = create_italy_booking(test_user1)
 
-    bookings = Booking.objects.filter(user=user)
+    bookings = Booking.objects.filter(user=test_user1)
 
     assert bookings.count() == 2
-    assert booking1, booking2 in bookings
+    assert booking1 in bookings and booking2 in bookings
 
 @pytest.mark.django_db
-def test_user_deletion_cascase(normal_user):
-    user = create_user(normal_user)
+def test_booking_query_for_multiple_user(test_user1, test_user2):
+    booking1 = create_paris_booking(test_user1)
+    booking2 = create_italy_booking(test_user2)
 
-    booking = Booking.objects.create(
-        user = user,
-        destination="Paris"
-    )
+    user1_booking = Booking.objects.filter(user=test_user1)
+    user2_booking = Booking.objects.filter(user=test_user2)
 
+    assert user1_booking.count() == 1
+    assert booking1 in user1_booking
+    assert booking2 not in user1_booking
+
+    assert user2_booking.count() == 1
+    assert booking2 in user2_booking
+    assert booking1 not in user2_booking
+
+@pytest.mark.django_db
+def test_user_deletion_cascase(test_user1):
+    booking = create_paris_booking(test_user1)
     assert Booking.objects.count() == 1
 
-    user.delete()
-
+    test_user1.delete()
     assert Booking.objects.count() == 0
-
