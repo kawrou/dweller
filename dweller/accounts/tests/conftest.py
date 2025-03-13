@@ -1,6 +1,15 @@
 import pytest
 from datetime import date, timedelta
-from tests.conftest_global import normal_user
+
+@pytest.fixture
+def normal_user():
+    return {
+        'email': "user1@user.com",
+        'password': 'StrongPassword123',
+        'first_name': 'John',
+        'last_name': 'Doe',
+        'dob': '1990-08-01'
+    }
 
 @pytest.fixture
 def valid_form_data():

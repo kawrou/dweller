@@ -1,13 +1,14 @@
 from django.db import IntegrityError
 from django.test import TestCase
 import pytest
+# from tests.conftest_global import test_user1
 from accounts.models import User as UserModel
 from django.contrib.auth import get_user_model
 
-User: type[UserModel] = get_user_model()
+CustomerUser = get_user_model()
 
 def create_user(normal_user) -> UserModel:
-    return User.objects.create_user(
+    return CustomerUser.objects.create_user(
         email=normal_user["email"], 
         password=normal_user["password"], 
         first_name=normal_user["first_name"],
@@ -24,7 +25,7 @@ def test_create_user(normal_user) -> None:
     assert user.first_name == normal_user["first_name"]
     assert user.last_name == normal_user["last_name"]
     assert user.date_of_birth == normal_user["dob"]
-    assert user.check_password("foo")
+    assert user.check_password(normal_user["password"])
     assert user.is_active 
     assert not user.is_staff 
     assert not user.is_superuser 
@@ -46,7 +47,7 @@ def test_hashed_password(normal_user):
 @pytest.mark.django_db
 def test_user_creation_fails_without_email(normal_user):
     with pytest.raises(ValueError):
-        User.objects.create_user(
+        CustomerUser.objects.create_user(
             email="", 
             password=normal_user["password"], 
             first_name=normal_user["first_name"], 
@@ -57,11 +58,11 @@ def test_user_creation_fails_without_email(normal_user):
 @pytest.mark.django_db
 def test_user_str_representation(normal_user):
     user = create_user(normal_user)
-    assert str(user) == "normal@user.com"
+    assert str(user) == "user1@user.com"
 
 @pytest.mark.django_db
 def test_create_superuser():
-    admin_user = User.objects.create_superuser(
+    admin_user = CustomerUser.objects.create_superuser(
         email="admin@user.com", 
         first_name="Super", 
         last_name="Admin", 

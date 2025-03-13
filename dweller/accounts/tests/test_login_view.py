@@ -31,7 +31,7 @@ def test_valid_login_redirect(client, normal_user):
     )
 
     assert response.status_code == 302
-    assert response.url == reverse("index")
+    assert response.url == reverse("trips")
 
 @pytest.mark.django_db
 def test_unmatched_passwords_shows_errors(client, normal_user):
