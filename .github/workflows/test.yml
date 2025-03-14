@@ -52,4 +52,5 @@ jobs:
 
     - name: Run Tests
       run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/dweller
         pipenv run pytest
